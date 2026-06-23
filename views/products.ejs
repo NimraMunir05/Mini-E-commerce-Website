@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - ShopEase</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #f59e0b;
+            --accent-color: #10b981;
+            --dark-color: #1f2937;
+            --light-color: #f8fafc;
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .main-content {
+            padding-top: 100px;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .page-header h1 {
+            color: var(--dark-color);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            height: 100%;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            color: var(--dark-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-tag {
+            background: var(--gradient-secondary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .form-control {
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 0.5rem;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background: var(--gradient-secondary);
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            height: 100%;
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .category-card h4 {
+            color: var(--dark-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-card p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .categories-section {
+            margin-bottom: 3rem;
+        }
+
+        .product-item {
+            transition: all 0.3s ease;
+        }
+
+        .product-item.hidden {
+            display: none;
+        }
+
+        .filter-active {
+            background: var(--gradient-secondary) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .no-products-message {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        .success-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--gradient-accent);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .success-message.show {
+            transform: translateX(0);
+        }
+
+        footer {
+            background: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+            border-radius: 0 0 10px 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+            <div class="container">
+                <a href="/" class="navbar-brand fw-bold d-flex align-items-center">
+                    <div class="me-2" style="width: 40px; height: 40px; background: var(--gradient-primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">🛍️</div>
+                    ShopEase
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="/products">Products</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/cart">🛒 Cart</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/orders">Orders</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1>Our Products</h1>
+                <p class="text-muted">Discover amazing products at unbeatable prices</p>
+            </div>
+            
+            <!-- Shop by Category Section -->
+            <div class="categories-section">
+                <div class="text-center mb-5">
+                    <h2 class="display-6 fw-bold mb-3">Shop by Category</h2>
+                    <p class="lead text-muted">Find exactly what you're looking for</p>
+                    <div class="mb-3">
+                        <button onclick="showAllProducts()" class="btn btn-secondary me-2">Show All Products</button>
+                    </div>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="category-card">
+                            <div class="category-icon">📱</div>
+                            <h4>Electronics</h4>
+                            <p class="text-muted">Latest gadgets and tech</p>
+                            <button onclick="filterProducts('electronics')" class="btn btn-primary">Explore</button>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="category-card">
+                            <div class="category-icon">👕</div>
+                            <h4>Fashion</h4>
+                            <p class="text-muted">Trendy clothing & accessories</p>
+                            <button onclick="filterProducts('fashion')" class="btn btn-primary">Explore</button>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="category-card">
+                            <div class="category-icon">🏠</div>
+                            <h4>Home & Living</h4>
+                            <p class="text-muted">Beautiful home essentials</p>
+                            <button onclick="filterProducts('home-living')" class="btn btn-primary">Explore</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- All Products Section -->
+            <div class="row row-cols-1 row-cols-md-3 g-4" id="products-container">
+                <% products.forEach((product, index) => { %>
+                    <div class="col product-item" data-category="<%= getProductCategory(product.name) %>">
+                        <div class="product-card">
+                            <img src="<%= product.image %>" class="product-image w-100" alt="<%= product.name %>">
+                            <div class="card-body">
+                                <h5 class="card-title"><%= product.name %></h5>
+                                <span class="price-tag">$<%= product.price %></span>
+                                <form action="/api/cart/add" method="POST" class="d-flex align-items-center gap-2">
+                                    <input type="hidden" name="productId" value="<%= product._id %>">
+                                    <input type="number" name="quantity" value="1" min="1" class="form-control" style="width: 80px;" />
+                                    <button type="submit" class="btn btn-primary">Add to Cart</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        </div>
+    </div>
+
+    <div id="success-message" class="success-message">
+        Product added to cart successfully!
+    </div>
+
+    <footer class="bg-dark text-white text-center py-4">
+        <div class="container">
+            <p>&copy; 2024 ShopEase. Made with ❤️ for amazing shopping experiences</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentFilter = 'all';
+
+        function filterProducts(category) {
+            const products = document.querySelectorAll('.product-item');
+            const buttons = document.querySelectorAll('.btn-primary');
+            
+            // Remove active class from all buttons
+            buttons.forEach(btn => {
+                btn.classList.remove('filter-active');
+            });
+            
+            // Add active class to clicked button
+            event.target.classList.add('filter-active');
+            
+            if (category === 'all') {
+                // Show all products
+                products.forEach(product => {
+                    product.classList.remove('hidden');
+                });
+                currentFilter = 'all';
+            } else {
+                // Filter products by category
+                products.forEach(product => {
+                    if (product.dataset.category === category) {
+                        product.classList.remove('hidden');
+                    } else {
+                        product.classList.add('hidden');
+                    }
+                });
+                currentFilter = category;
+            }
+            
+            // Show message if no products found
+            const visibleProducts = document.querySelectorAll('.product-item:not(.hidden)');
+            let noProductsMessage = document.getElementById('no-products-message');
+            
+            if (visibleProducts.length === 0) {
+                if (!noProductsMessage) {
+                    noProductsMessage = document.createElement('div');
+                    noProductsMessage.id = 'no-products-message';
+                    noProductsMessage.innerHTML = '<p>No products found in this category.</p>';
+                    document.getElementById('products-container').appendChild(noProductsMessage);
+                }
+            } else {
+                if (noProductsMessage) {
+                    noProductsMessage.remove();
+                }
+            }
+        }
+
+        // Add "Show All" functionality
+        function showAllProducts() {
+            const products = document.querySelectorAll('.product-item');
+            const buttons = document.querySelectorAll('.btn-primary');
+            
+            // Remove active class from all buttons
+            buttons.forEach(btn => {
+                btn.classList.remove('filter-active');
+            });
+            
+            // Show all products
+            products.forEach(product => {
+                product.classList.remove('hidden');
+            });
+            
+            // Remove no products message if exists
+            const noProductsMessage = document.getElementById('no-products-message');
+            if (noProductsMessage) {
+                noProductsMessage.remove();
+            }
+            
+            currentFilter = 'all';
+        }
+
+        // Handle form submissions for Add to Cart
+        document.addEventListener('DOMContentLoaded', function() {
+            const forms = document.querySelectorAll('form[action="/api/cart/add"]');
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const formData = new FormData(form);
+                    const productId = formData.get('productId');
+                    const quantity = formData.get('quantity');
+                    
+                    fetch('/api/cart/add', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            productId: productId,
+                            quantity: parseInt(quantity)
+                        })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            showSuccessMessage();
+                            // Reset quantity to 1
+                            form.querySelector('input[name="quantity"]').value = 1;
+                        } else {
+                            alert('Failed to add product to cart. Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Failed to add product to cart. Please try again.');
+                    });
+                });
+            });
+        });
+
+        function showSuccessMessage() {
+            const message = document.getElementById('success-message');
+            message.classList.add('show');
+            setTimeout(() => {
+                message.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html> 
